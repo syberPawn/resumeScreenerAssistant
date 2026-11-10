@@ -34,7 +34,7 @@ Copy `.env.example` to `.env.local` and fill in the six values:
 |---|---|
 | `GEMINI_API_KEY` | Your Gemini API key |
 | `GEMINI_PRIMARY_MODEL` | `gemini-3.5-flash-lite` (already filled in) |
-| `GEMINI_FALLBACK_MODEL` | `gemini-2.5-flash` (already filled in) |
+| `GEMINI_FALLBACK_MODEL` | `gemini-3.1-flash-lite` (already filled in) |
 | `SUPABASE_URL` | The project URL from step 2 |
 | `SUPABASE_SECRET_KEY` | The secret key from step 2 |
 | `PROFILE_SIGNING_SECRET` | A random value. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
@@ -145,7 +145,7 @@ The report prompt scores with a fixed rubric (required skills 50, experience 30,
 
 **5. One fallback model, used only when retrying can help.**
 If the primary model returns a rate limit error, a server error or a timeout, the call is retried once on the fallback model. Other errors fail straight away with a clear message. Model names are environment variables, so a retired model can be replaced without a code change.
-*Trade-off:* the fallback (`gemini-2.5-flash`) is scheduled by Google to route to the primary model from December 2026, so that setting needs updating before then.
+*Trade-off:* the fallback (`gemini-3.1-flash-lite`) is an earlier, lighter model with its own rate limits. It keeps the app available when the primary model is busy or down, but it is not there to improve quality.
 
 **6. A signed profile.**
 The browser sends the profile back to the server for saving, so the server signs it together with both texts. A request with an edited profile or different texts is rejected, which means nobody can save a made-up candidate by calling the API directly.
