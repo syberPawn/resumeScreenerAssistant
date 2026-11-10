@@ -42,7 +42,7 @@ export function ConfirmDialog({ open, title, children, confirmLabel, busy, error
         event.preventDefault();
         if (!busy) onCancel();
       }}
-      className="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-xl backdrop:bg-black/40"
+      className="m-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-xl backdrop:bg-black/40"
     >
       <h2 id="confirm-title" className="text-lg font-semibold text-zinc-900">
         {title}

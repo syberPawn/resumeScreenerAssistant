@@ -42,9 +42,9 @@ export function TextInput({ kind, state, labelledBy, onChange, onDone }: Props) 
         value={text}
         onChange={(event) => onChange(event.target.value)}
         placeholder={fileMode ? messages.removeFileToType() : `Type or paste the ${kindLabel(kind)}`}
-        rows={12}
+        rows={7}
         className={
-          "w-full resize-y rounded-md border bg-white p-3 text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 " +
+          "w-full resize-y rounded-xl border bg-white p-3 text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 " +
           "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-indigo-600 " +
           "aria-disabled:cursor-not-allowed aria-disabled:bg-zinc-100 " +
           (over || error ? "border-red-500" : "border-zinc-300")
@@ -73,7 +73,7 @@ export function TextInput({ kind, state, labelledBy, onChange, onDone }: Props) 
       </div>
 
       <div id={`${id}-message`}>
-        {fileMode && <p className="text-sm text-zinc-600">{messages.removeFileToType()}</p>}
+        {fileMode && <p className="sr-only">{messages.removeFileToType()}</p>}
         {over && (
           <p role="alert" className={errorText}>
             {messages.tooLong(kind, length)}

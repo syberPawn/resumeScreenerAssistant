@@ -149,7 +149,7 @@ export function HistoryScreen() {
       </p>
 
       {loadError ? (
-        <div className="rounded-lg border border-red-200 bg-white p-6">
+        <div className="rounded-2xl border border-red-200 bg-white shadow-sm p-6">
           <p role="alert" className={errorText}>
             {loadError}
           </p>
@@ -162,12 +162,12 @@ export function HistoryScreen() {
           Loading History…
         </p>
       ) : data.items.length === 0 ? (
-        <p className="rounded-lg border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-zinc-200 bg-white shadow-sm p-6 text-sm text-zinc-600">
           {filtered ? "No analyses match this search or filter." : "No analyses saved yet."}
         </p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
+          <div className="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-sm">
             <table className="w-full text-left text-sm">
               <caption className="sr-only">Saved analyses, newest first</caption>
               <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">

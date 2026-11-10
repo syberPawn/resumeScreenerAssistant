@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { AnalyseControl } from "@/components/AnalyseControl";
 import { FileInput } from "@/components/FileInput";
+import { BriefcaseIcon, UserIcon } from "@/components/icons";
 import { ProfileCard } from "@/components/ProfileCard";
 import { ReportLayout } from "@/components/ReportLayout";
 import { ReportLoading, ReportView } from "@/components/ReportView";
@@ -191,23 +192,27 @@ export function Workspace() {
 
     return (
       <ReportLayout
-        card={phase.name === "failed" && !profile ? null : <ProfileCard profile={profile} />}
-        report={
-          phase.name === "done" ? (
-            <div className="flex flex-col gap-6">
-              <ReportView
-                matchScore={phase.analysis.matchScore}
-                report={phase.analysis.report}
-                jobTitle={phase.analysis.jobTitle}
-              />
-              <div>
-                <button type="button" className={button.primary} onClick={reviewed}>
+        card={
+          phase.name === "failed" && !profile ? null : (
+            <div className="flex flex-col gap-3">
+              <ProfileCard profile={profile} />
+              {phase.name === "done" && (
+                <button type="button" className={`${button.primary} w-full py-2.5`} onClick={reviewed}>
                   Reviewed
                 </button>
-              </div>
+              )}
             </div>
+          )
+        }
+        report={
+          phase.name === "done" ? (
+            <ReportView
+              matchScore={phase.analysis.matchScore}
+              report={phase.analysis.report}
+              jobTitle={phase.analysis.jobTitle}
+            />
           ) : phase.name === "failed" ? (
-            <div className="rounded-lg border border-red-200 bg-white p-6">
+            <div className="rounded-2xl border border-red-200 bg-white shadow-sm p-6">
               <p role="alert" className={`${errorText} text-base`}>
                 {phase.message}
               </p>
@@ -236,16 +241,27 @@ export function Workspace() {
     );
   }
 
-  const panelHeading = (kind: InputKind) => (
-    <h2
-      ref={headings[kind]}
-      id={`${kind}-heading`}
-      tabIndex={-1}
-      className="mb-3 rounded text-base font-semibold text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-    >
-      {kind === "resume" ? "Candidate resume" : kindTitle(kind)}
-    </h2>
-  );
+  const panelHeading = (kind: InputKind) => {
+    const PanelIcon = kind === "resume" ? UserIcon : BriefcaseIcon;
+    return (
+      <div className="flex items-center gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+          <PanelIcon className="h-5 w-5" />
+        </span>
+        <div>
+          <h2
+            ref={headings[kind]}
+            id={`${kind}-heading`}
+            tabIndex={-1}
+            className="rounded text-base font-semibold text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {kind === "resume" ? "Candidate resume" : kindTitle(kind)}
+          </h2>
+          <p className="text-sm text-zinc-500">Upload a file or paste the text</p>
+        </div>
+      </div>
+    );
+  };
 
   const textInput = (kind: InputKind) => (
     <TextInput
@@ -267,24 +283,34 @@ export function Workspace() {
     />
   );
 
-  // Two panels split by a partition line, with Analyse at its centre.
-  // On small screens the panels stack, and Analyse comes last.
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
-      <section aria-labelledby="jobDescription-heading" className="order-1 md:pr-8">
-        {panelHeading("jobDescription")}
-        {textInput("jobDescription")}
-      </section>
-      <section
-        aria-labelledby="resume-heading"
-        className="order-3 mt-8 border-zinc-300 md:order-2 md:mt-0 md:border-l md:pl-8"
-      >
-        {panelHeading("resume")}
-        {textInput("resume")}
-      </section>
+  // Each panel puts the file upload first, then a text box for pasting.
+  const panel = (kind: InputKind) => (
+    <section
+      aria-labelledby={`${kind}-heading`}
+      className="flex flex-col gap-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+    >
+      {panelHeading(kind)}
+      {fileInput(kind)}
+      <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wide text-zinc-400" aria-hidden="true">
+        <span className="h-px flex-1 bg-zinc-200" />
+        or paste text
+        <span className="h-px flex-1 bg-zinc-200" />
+      </div>
+      {textInput(kind)}
+    </section>
+  );
 
-      <div className="relative order-5 mt-8 flex justify-center md:order-3 md:col-span-2 md:mt-0 md:py-6">
-        <div className="absolute inset-y-0 left-1/2 hidden w-px bg-zinc-300 md:block" aria-hidden="true" />
+  // Two panels split by a partition line. The round Analyse button floats over the centre of that line,
+  // so it takes no space of its own. On small screens the panels stack, and Analyse comes last.
+  return (
+    <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-5">
+      {panel("jobDescription")}
+      {panel("resume")}
+      <div
+        className="pointer-events-none absolute inset-y-4 left-1/2 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-zinc-300 to-transparent md:block"
+        aria-hidden="true"
+      />
+      <div className="flex justify-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
         <AnalyseControl
           jobDescription={panels.jobDescription}
           resume={panels.resume}
@@ -292,9 +318,6 @@ export function Workspace() {
           onNotReady={focusFirstNotReady}
         />
       </div>
-
-      <div className="order-2 mt-4 md:order-4 md:mt-0 md:pr-8">{fileInput("jobDescription")}</div>
-      <div className="order-4 mt-4 border-zinc-300 md:order-5 md:mt-0 md:border-l md:pl-8">{fileInput("resume")}</div>
     </div>
   );
 }

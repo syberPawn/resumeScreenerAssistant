@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type DragEvent } from "react";
+import { FileTextIcon, UploadIcon } from "@/components/icons";
 import { hasTypedText, panelError, type PanelState } from "@/lib/client/panel-state";
 import { button, errorText } from "@/lib/client/ui";
 import { LIMITS } from "@/lib/limits";
@@ -62,7 +63,7 @@ export function FileInput({ kind, state, onFile, onRemove, onClearText }: Props)
       />
 
       {state.status === "reading" && (
-        <div className="flex items-center justify-between gap-3 rounded-md border border-zinc-300 bg-zinc-50 p-4">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-5">
           <p className="text-sm text-zinc-700" role="status">
             <span className="mr-2 inline-block h-3 w-3 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent align-middle" />
             Reading {state.fileName}…
@@ -76,8 +77,8 @@ export function FileInput({ kind, state, onFile, onRemove, onClearText }: Props)
       {state.status === "fileReady" && (
         <div
           className={
-            "flex items-center justify-between gap-3 rounded-md border bg-white p-4 " +
-            (error ? "border-red-500" : "border-zinc-300")
+            "flex items-center justify-between gap-3 rounded-xl border bg-indigo-50/40 px-4 py-5 " +
+            (error ? "border-red-500" : "border-indigo-200")
           }
         >
           <div className="min-w-0">
@@ -100,26 +101,30 @@ export function FileInput({ kind, state, onFile, onRemove, onClearText }: Props)
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
           className={
-            "flex flex-col items-center gap-2 rounded-md border-2 border-dashed p-5 text-center " +
-            (dragging ? "border-indigo-500 bg-indigo-50" : blocked ? "border-zinc-200 bg-zinc-50" : "border-zinc-300 bg-white")
+            "flex flex-col items-center gap-2 rounded-xl border-2 border-dashed px-5 py-6 text-center transition-colors " +
+            (dragging
+              ? "border-indigo-500 bg-indigo-50"
+              : blocked
+                ? "border-zinc-200 bg-zinc-50"
+                : "border-indigo-200 bg-indigo-50/40 hover:border-indigo-300")
           }
         >
-          <p className={blocked ? "text-sm text-zinc-400" : "text-sm text-zinc-600"}>
-            Drag a PDF or Word (.docx) file here, or
-          </p>
+          <FileTextIcon className={blocked ? "h-7 w-7 text-zinc-300" : "h-7 w-7 text-indigo-500"} />
+          <p className={blocked ? "text-sm text-zinc-400" : "text-sm text-zinc-700"}>Drag &amp; drop a file here, or</p>
           <button
             type="button"
-            className={button.secondary}
+            className={`${button.secondary} rounded-full`}
             aria-disabled={!canAdd || undefined}
             aria-describedby={`${id}-hint`}
             onClick={chooseFile}
           >
+            <UploadIcon className="h-4 w-4" />
             Choose file
           </button>
           <p id={`${id}-hint`} className={blocked ? "text-sm font-medium text-zinc-700" : "text-xs text-zinc-500"}>
             {blocked
               ? messages.clearTextToUpload()
-              : `PDF or Word (.docx), up to ${megabytes(LIMITS.fileBytes).replace(".0", "")} MB and ${LIMITS.pdfPages} pages.`}
+              : `PDF or Word (.docx), up to ${megabytes(LIMITS.fileBytes).replace(".0", "")} MB and ${LIMITS.pdfPages} pages`}
           </p>
           {blocked && (
             <button type="button" className={button.link} onClick={onClearText}>

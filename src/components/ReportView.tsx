@@ -23,7 +23,7 @@ export function ReportView({ matchScore, report, jobTitle, createdAt }: Props) {
         </p>
       )}
 
-      <section aria-labelledby="score-heading" className="rounded-lg border border-zinc-200 bg-white p-6">
+      <section aria-labelledby="score-heading" className="rounded-2xl border border-zinc-200 bg-white shadow-sm p-6">
         <h2 id="score-heading" className="text-sm font-medium uppercase tracking-wide text-zinc-500">
           Match score
         </h2>
@@ -58,7 +58,7 @@ function ReportList({
 }) {
   const List = ordered ? "ol" : "ul";
   return (
-    <section aria-labelledby={`${id}-heading`} className="rounded-lg border border-zinc-200 bg-white p-6">
+    <section aria-labelledby={`${id}-heading`} className="rounded-2xl border border-zinc-200 bg-white shadow-sm p-6">
       <h2 id={`${id}-heading`} className="text-base font-semibold text-zinc-900">
         {title}
       </h2>
@@ -83,10 +83,10 @@ export function ReportLoading() {
         Analysing the resume against the job description…
       </p>
       <div className="flex animate-pulse flex-col gap-6" aria-hidden="true">
-        <div className="h-36 rounded-lg bg-zinc-200" />
-        <div className="h-32 rounded-lg bg-zinc-200" />
-        <div className="h-24 rounded-lg bg-zinc-200" />
-        <div className="h-32 rounded-lg bg-zinc-200" />
+        <div className="h-36 rounded-2xl bg-zinc-200" />
+        <div className="h-32 rounded-2xl bg-zinc-200" />
+        <div className="h-24 rounded-2xl bg-zinc-200" />
+        <div className="h-32 rounded-2xl bg-zinc-200" />
       </div>
     </div>
   );

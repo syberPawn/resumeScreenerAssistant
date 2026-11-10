@@ -9,7 +9,7 @@ import type { Profile } from "@/lib/types";
 export function ProfileCard({ profile }: { profile: Profile | null }) {
   if (!profile) {
     return (
-      <div className="rounded-lg border border-zinc-200 bg-white p-5" aria-busy="true">
+      <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm p-5" aria-busy="true">
         <p className="sr-only" role="status">
           Loading the candidate&apos;s profile…
         </p>
@@ -52,7 +52,7 @@ export function ProfileCard({ profile }: { profile: Profile | null }) {
   }
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5">
+    <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm p-5">
       <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Candidate</p>
       <h2 className="mt-1 break-words text-lg font-semibold text-zinc-900">{profile.name}</h2>
       {details.length > 0 && (

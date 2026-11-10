@@ -32,7 +32,7 @@ export function SavedReport({ params }: { params: Promise<{ id: string }> }) {
 
   if (state.name === "error") {
     return (
-      <div className="rounded-lg border border-red-200 bg-white p-6">
+      <div className="rounded-2xl border border-red-200 bg-white shadow-sm p-6">
         <p role="alert" className={`${errorText} text-base`}>
           {state.message}
         </p>
@@ -59,22 +59,24 @@ export function SavedReport({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <ReportLayout
-      card={<ProfileCard profile={state.name === "loaded" ? state.analysis.profile : null} />}
+      card={
+        <div className="flex flex-col gap-3">
+          <ProfileCard profile={state.name === "loaded" ? state.analysis.profile : null} />
+          {state.name === "loaded" && (
+            <button type="button" className={`${button.primary} w-full py-2.5`} onClick={() => router.push("/")}>
+              Reviewed
+            </button>
+          )}
+        </div>
+      }
       report={
         state.name === "loaded" ? (
-          <div className="flex flex-col gap-6">
-            <ReportView
-              matchScore={state.analysis.matchScore}
-              report={state.analysis.report}
-              jobTitle={state.analysis.jobTitle}
-              createdAt={state.analysis.createdAt}
-            />
-            <div>
-              <button type="button" className={button.primary} onClick={() => router.push("/")}>
-                Reviewed
-              </button>
-            </div>
-          </div>
+          <ReportView
+            matchScore={state.analysis.matchScore}
+            report={state.analysis.report}
+            jobTitle={state.analysis.jobTitle}
+            createdAt={state.analysis.createdAt}
+          />
         ) : (
           <p role="status" className="text-sm text-zinc-700">
             Loading the analysis…
