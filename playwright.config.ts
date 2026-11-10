@@ -10,6 +10,8 @@ export default defineConfig({
   fullyParallel: true,
   retries: 0,
   reporter: "list",
+  // The first load of each page after a fresh build can be slow while all tests run in parallel.
+  expect: { timeout: 10_000 },
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
