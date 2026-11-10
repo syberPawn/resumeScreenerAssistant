@@ -20,6 +20,8 @@ create table public.analyses (
 -- Only the server, using the secret key, can reach it.
 alter table public.analyses enable row level security;
 revoke all on table public.analyses from anon, authenticated;
+-- The server's role gets exactly what the app needs, whether or not the project exposes new tables automatically.
+grant select, insert, delete on table public.analyses to service_role;
 
 create index analyses_created_at_idx on public.analyses (created_at desc);
 create index analyses_match_score_idx on public.analyses (match_score);
