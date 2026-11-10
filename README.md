@@ -196,3 +196,12 @@ Row Level Security is on with no policies, the public roles have no access to th
 
 **13. Demo scope.**
 This is a demo, so it runs on free tiers and has no login: anyone with the link can use it and see History. Moving beyond a demo would need sign-in and paid tiers (decision 8).
+
+**14. No rate limiting, by design.**
+I left out request rate limiting on purpose:
+- **Cost cannot run away.** The app uses the Gemini free tier with no billing, so there is nothing to overspend. Gemini enforces its own per-minute and daily limits for each model.
+- **The worst case is handled.** If those limits are reached, the request falls back to the second model, which has its own limits. If both are exhausted, the app shows a clear "AI usage limit reached" message, and nothing is saved.
+- **Each request is already bounded.** The input limits (decision 10) cap how much text a single request can send to the model.
+- **Doing it properly needs more infrastructure than a demo justifies.** On serverless functions, a counter kept in memory does not work, because each request can run on a different instance. Real rate limiting needs a shared store or Vercel's firewall rules.
+
+Before real use, I would add per-user limits together with sign-in, so each HR account has its own allowance.
